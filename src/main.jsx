@@ -17,7 +17,27 @@ function money(value) {
   return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-function App() {
+function Navbar() {
+  return <nav className="nav">
+    <a className="brand" href="/home"><span>NFS-e</span><b>Baixar NFS-e Pro</b></a>
+    <div className="links">
+      <a href="/home#instalar">Instalar</a>
+      <a href="/home#planos">Planos</a>
+      <a href="/suporte">Suporte</a>
+      <a className="navBtn" href={EXTENSION_ZIP} download>Baixar extensão</a>
+    </div>
+  </nav>;
+}
+
+function Footer() {
+  return <footer>
+    <b>NFS-e Pro</b>
+    <span>Extensão para download de notas fiscais NFS-e.</span>
+    <a href={EXTENSION_ZIP} download>Download da extensão</a>
+  </footer>;
+}
+
+function HomePage() {
   const [copied, setCopied] = useState('');
   const bestPlan = useMemo(() => plans.reduce((best, plan) => Number(plan.months) > Number(best.months) ? plan : best, plans[0]), []);
 
@@ -28,10 +48,7 @@ function App() {
   };
 
   return <main>
-    <nav className="nav">
-      <a className="brand" href="#top"><span>NFS-e</span><b>Baixar NFS-e Pro</b></a>
-      <div className="links"><a href="#instalar">Instalar</a><a href="#planos">Planos</a><a href="#suporte">Suporte</a><a className="navBtn" href={EXTENSION_ZIP} download>Baixar extensão</a></div>
-    </nav>
+    <Navbar />
 
     <section id="top" className="hero">
       <div className="heroText">
@@ -82,12 +99,53 @@ function App() {
       <img className="plansShot" src="/images/planos-dashboard.png" alt="Planos cadastrados" />
     </section>
 
-    <section id="suporte" className="section support">
-      <div className="supportCard"><div><span><HelpCircle/> Suporte</span><h2>Dúvidas, instalação e problemas de pagamento</h2><p>Atendimento disponível das <b>08:00 às 21:00</b>, de domingo a domingo, para dúvidas, suporte técnico e resolução de problemas de pagamento.</p></div><div className="supportActions"><a href={EXTENSION_ZIP} download><Download size={18}/> Baixar extensão</a><a href="mailto:helio.desenvolv@gmail.com"><Mail size={18}/> E-mail de suporte</a><a href="https://wa.me/5581999499307"><MessageCircle size={18}/> WhatsApp suporte</a></div></div>
+    <section className="section support">
+      <div className="supportCard"><div><span><HelpCircle/> Suporte</span><h2>Dúvidas, instalação e problemas de pagamento</h2><p>Atendimento disponível das <b>08:00 às 21:00</b>, de domingo a domingo, para dúvidas, suporte técnico e resolução de problemas de pagamento.</p></div><div className="supportActions"><a href="/suporte"><HelpCircle size={18}/> Abrir suporte</a><a href="mailto:helio.desenvolv@gmail.com"><Mail size={18}/> E-mail de suporte</a><a href="https://wa.me/5581999499307"><MessageCircle size={18}/> WhatsApp suporte</a></div></div>
     </section>
 
-    <footer><b>NFS-e Pro</b><span>Extensão para download de notas fiscais NFS-e.</span><a href={EXTENSION_ZIP} download>Download da extensão</a></footer>
+    <Footer />
   </main>;
+}
+
+function SupportPage() {
+  return <main>
+    <Navbar />
+    <section className="supportHero">
+      <div className="supportHeroCard">
+        <span className="badge"><HelpCircle size={16}/> Central de suporte</span>
+        <h1>Suporte Craw NFS-e Pro</h1>
+        <p>Precisa de ajuda com instalação, ativação de licença, pagamento ou download de XML e DANFSE/PDF? Nossa equipe está pronta para atender.</p>
+        <div className="supportActions supportMainActions">
+          <a href="mailto:helio.desenvolv@gmail.com"><Mail size={18}/> Enviar e-mail</a>
+          <a href="https://wa.me/5581999499307"><MessageCircle size={18}/> Chamar no WhatsApp</a>
+          <a href={EXTENSION_ZIP} download><Download size={18}/> Baixar extensão</a>
+        </div>
+      </div>
+    </section>
+
+    <section className="section supportGrid">
+      <article><h3>Horário de atendimento</h3><p>Atendimento disponível das <b>08:00 às 21:00</b>, de domingo a domingo.</p></article>
+      <article><h3>E-mail de suporte</h3><p><a href="mailto:helio.desenvolv@gmail.com">helio.desenvolv@gmail.com</a></p></article>
+      <article><h3>WhatsApp</h3><p><a href="https://wa.me/5581999499307">+55 81 99949-9307</a></p></article>
+      <article><h3>Assuntos atendidos</h3><p>Instalação da extensão, ativação de licença, renovação de assinatura, download de XML, download de DANFSE/PDF e dúvidas de uso.</p></article>
+    </section>
+
+    <section className="section faq">
+      <div className="sectionHead"><span>FAQ</span><h2>Perguntas frequentes</h2><p>Informações rápidas para facilitar a utilização da extensão.</p></div>
+      <article><h3>A extensão baixa XML e DANFSE/PDF?</h3><p>Sim. A Craw NFS-e Pro permite baixar arquivos XML e DANFSE/PDF das NFS-e emitidas e recebidas disponíveis no Portal Nacional da NFS-e.</p></article>
+      <article><h3>Preciso estar logado no Portal Nacional da NFS-e?</h3><p>Sim. O usuário deve acessar o Portal Nacional da NFS-e normalmente, com certificado digital, GovBR ou login disponível, e depois utilizar o painel lateral da extensão.</p></article>
+      <article><h3>A extensão possui assinatura paga?</h3><p>Sim. O acesso Pro é liberado por licença ativa, conforme o plano contratado pelo usuário.</p></article>
+    </section>
+
+    <Footer />
+  </main>;
+}
+
+function App() {
+  const path = window.location.pathname;
+  if (path === '/' || path === '/home') return <HomePage />;
+  if (path === '/suporte') return <SupportPage />;
+  return <HomePage />;
 }
 
 createRoot(document.getElementById('root')).render(<App />);
